@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+//构建三个静态页面分别是主页、帮助页、关于页
+ Route::get('/', 'StaticPagesController@home');
+ Route::get('/help', 'StaticPagesController@help');
+ Route::get('/about', 'StaticPagesController@about');
