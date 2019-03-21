@@ -19,17 +19,17 @@
 
         <div class="form-group">
           <label for="email">Email: </label>
-          <input type="text" name="name" class="form-control" value="{{old('email')}}">
+          <input type="text" name="email" class="form-control" value="{{old('email')}}">
         </div>
 
         <div class="form-group">
           <label for="password">Password: </label>
-          <input type="text" name="name" class="form-control" value="{{old('password')}}">
+          <input type="password" name="password" class="form-control" value="{{old('password')}}">
         </div>
 
         <div class="form-group">
           <label for="password_confirmation">Password confirmation: </label>
-          <input type="text" name="name" class="form-control" value="{{old('password_confirmation')}}">
+          <input type="password" name="password_confirmation" class="form-control" value="{{old('password_confirmation')}}">
         </div>
 
         <button type=submit class="btn btn-primary">Sign up</button>
