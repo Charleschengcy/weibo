@@ -29,11 +29,18 @@ class SessionsController extends Controller
 
         if(Auth::attempt($credentials, $request->has('remember')))
         {
-            //登录成功后
-            session()->flash('success', 'Welcome back!');
-            $fallback = route('users.show', Auth::user());
+            if(Auth::user()->activated){
+                //登录成功后
+                session()->flash('success', 'Welcome back!');
+                $fallback = route('users.show', Auth::user());
 
-            return redirect()->intended($fallback);
+                return redirect()->intended($fallback);
+            } else {
+                Auth::logout();
+                session()->flash('warning', 'Go check your email and activate your account');
+
+                return redirect('/');
+            }
 
         } else {
             //登录失败后

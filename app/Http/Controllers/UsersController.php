@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
+use Mail;
 
 class UsersController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth', [
-            'except' => ['show', 'create', 'store','index']
+            'except' => ['show', 'create', 'store','index','confirmEmail']
         ]);
 
         $this->middleware('guest', [
@@ -43,9 +44,39 @@ class UsersController extends Controller
             'password' => bcrypt($request->password)
         ]);
 
-        Auth::login($user);
-        session()->flash('success', 'Success, welcome to weibo');
+        // Auth::login($user);
+        // session()->flash('success', 'Success, welcome to weibo');
+        $this->sendEmailconfirmationTo($user);
+        session()->flash('success', 'The verification email has been sent to your email, please go and check it.');
 
+        // return redirect()->route('users.show', [$user]);
+        return redirect('/');
+    }
+
+    protected function sendEmailconfirmationTo($user)
+    {
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = 'summer@example.com';
+        $name = 'Summer';
+        $to = $user->email;
+        $subject ="Confirm your email on weibo app";
+
+        Mail::send($view, $data, function ($message) use ($from, $name, $to , $subject){
+            $message->from($from, $name)->to($to)->subject($subject);
+        });
+    }
+
+    public function confirmEmail($token)
+    {
+        $user = User::where('activation_token', $token)->firstOrFail();
+
+        $user->activated = true;
+        $user->activation_token = null;
+        $user->save();
+
+        Auth::login($user);
+        session()->flash('success', 'Success, your account has been activated successfully');
         return redirect()->route('users.show', [$user]);
     }
 
@@ -92,6 +123,7 @@ class UsersController extends Controller
 
         return back();
     }
+
 
 
 
