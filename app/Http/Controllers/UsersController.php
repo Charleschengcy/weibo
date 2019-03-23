@@ -76,7 +76,8 @@ class UsersController extends Controller
         $user->save();
 
         Auth::login($user);
-        session()->flash('success', 'Success, your account has been activated successfully');
+        session()->flash('success', 'Success, y
+            our account has been activated successfully');
         return redirect()->route('users.show', [$user]);
     }
 
